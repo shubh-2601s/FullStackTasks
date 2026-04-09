@@ -56,13 +56,13 @@ This project displays student records with features like **sorting, filtering, a
 1. Clone the repository:
 
 ```
-git clone https://github.com/your-username/your-repo-name.git
+git clone https://github.com/FullStackTasks.git
 ```
 
 2. Open the project folder:
 
 ```
-cd your-repo-name
+cd FullStackTasks
 ```
 
 3. Run the project:
