@@ -31,9 +31,12 @@ if not JWT_SECRET_KEY:
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRY_HOURS = int(os.environ.get("JWT_EXPIRY_HOURS", "24"))
 
-# Demo user store (replace with a real DB in production)
+# Demo user store – MUST be replaced with a real authentication system
+# (e.g., hashed passwords in a database) before any production use.
+# Credentials are loaded from environment variables with insecure fallbacks
+# that are clearly invalid for production.
 USERS = {
-    "admin": "password123",
+    os.environ.get("DEMO_USERNAME", "admin"): os.environ.get("DEMO_PASSWORD", ""),
 }
 
 # ---------------------------------------------------------------------------
@@ -214,7 +217,10 @@ def update_product(product_id: str):
             return error_response(400, "price must be a non-negative number")
         product["price"] = round(float(data["price"]), 2)
     if "quantity" in data:
-        product["quantity"] = int(data["quantity"])
+        try:
+            product["quantity"] = int(data["quantity"])
+        except (ValueError, TypeError):
+            return error_response(400, "quantity must be an integer")
 
     product["updated_at"] = datetime.now(timezone.utc).isoformat()
     return jsonify(product), 200
